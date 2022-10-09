@@ -19,13 +19,13 @@ const Menu = () => {
         <Navbar>
             <Nav>
                 <NavItem>
-                    <NavLink to="/home" style={{ textDecoration: "none", paddingRight: "1rem" }}>Home</NavLink>
+                    <NavLink to="/home" style={{ textDecoration: "none", paddingRight: "1rem", color: "orange" }}>Home</NavLink>
                 </NavItem>
                 {!isAuthnticated() && <> <NavItem>
-                    <NavLink to="/login" style={{ textDecoration: "none", paddingRight: "1rem" }}>Login</NavLink>
+                    <NavLink to="/login" style={{ textDecoration: "none", paddingRight: "1rem", color: "orange" }}>Login</NavLink>
                 </NavItem>
                     <NavItem>
-                        <NavLink to="/register" style={{ textDecoration: "none", paddingRight: "1rem" }}>Register</NavLink>
+                        <NavLink to="/register" style={{ textDecoration: "none", paddingRight: "1rem", color: "orange" }}>Register</NavLink>
                     </NavItem></>}
 
                 {/* User Menu */}
@@ -34,23 +34,29 @@ const Menu = () => {
                         signout(() => {
                             navigate("/login")
                         })
-                    }} style={{ textDecoration: "none", paddingRight: "1rem" }}>Logout</NavLink>
+                    }} style={{ textDecoration: "none", paddingRight: "1rem", color: "orange" }}>Logout</NavLink>
                 </NavItem>
                     <NavItem>
-                        <NavLink to="/dashboard" style={{ textDecoration: "none", paddingRight: "1rem" }}>Dashboard</NavLink>
+                        <NavLink to="/dashboard" style={{ textDecoration: "none", paddingRight: "1rem", color: "orange" }}>Dashboard</NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink to="/cart" style={{ textDecoration: "none", paddingRight: "1rem", color: "orange" }}>Cart</NavLink>
                     </NavItem>
                 </>}
 
                 {/* Admin Menu */}
                 {isAuthnticated() && userInfo().role === "admin" && <><NavItem>
-                    <NavLink to="/admindashboard" style={{ textDecoration: "none", paddingRight: "1rem" }}>Admin Area</NavLink>
+                    <NavLink to="/admindashboard" style={{ textDecoration: "none", paddingRight: "1rem", color: "orange" }}>Admin Area</NavLink>
                 </NavItem>
+                    <NavItem>
+                        <NavLink to="/cart" style={{ textDecoration: "none", paddingRight: "1rem", color: "orange" }}>Cart</NavLink>
+                    </NavItem>
                     <NavItem>
                         <NavLink onClick={() => {
                             signout(() => {
                                 navigate("/login")
                             })
-                        }} style={{ textDecoration: "none", paddingRight: "1rem" }}>Logout</NavLink>
+                        }} style={{ textDecoration: "none", paddingRight: "1rem", color: "orange" }}>Logout</NavLink>
                     </NavItem></>}
             </Nav>
         </Navbar>

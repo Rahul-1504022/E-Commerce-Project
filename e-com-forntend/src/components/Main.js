@@ -7,6 +7,12 @@ import Dashboard from "./user/Dashboard";
 import PrivateRoute from "./protectedRoutes/PrivateRoute";
 import AdminRoute from "./protectedRoutes/AdminRoute";
 import AdminDashBoard from "./admin/AdminDashBoard";
+import CreateCategory from "./admin/CreateCategory";
+import CreateProduct from "./admin/CreateProduct";
+import ProductDetails from "./home/productDetails";
+import Cart from "./order/Cart";
+import ShippingAddress from "./order/ShippingAddress";
+import Checkout from "./order/Checkout";
 
 const Main = () => {
     return (
@@ -15,6 +21,7 @@ const Main = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/product/:id" element={<ProductDetails />} />
             <Route
                 path="/dashboard"
                 element={(
@@ -28,7 +35,38 @@ const Main = () => {
                     <AdminRoute>
                         <AdminDashBoard />
                     </AdminRoute>)} />
+            <Route
+                path="/admin/create-category"
+                element={(
+                    <AdminRoute>
+                        <CreateCategory />
+                    </AdminRoute>)} />
+            <Route
+                path="/admin/create-product"
+                element={(
+                    <AdminRoute>
+                        <CreateProduct />
+                    </AdminRoute>)} />
+            <Route
+                path="/cart"
+                element={(
+                    <PrivateRoute>
+                        <Cart />
+                    </PrivateRoute>)} />
+            <Route
+                path="/shipping"
+                element={(
+                    <PrivateRoute>
+                        <ShippingAddress />
+                    </PrivateRoute>)} />
+            <Route
+                path="/checkout"
+                element={(
+                    <PrivateRoute>
+                        <Checkout />
+                    </PrivateRoute>)} />
         </Routes>
+
     )
 }
 export default Main;

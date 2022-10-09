@@ -10,10 +10,10 @@ const AdminDashBoard = () => {
                 <h4 className="card-header">User Links</h4>
                 <ul className="list-group">
                     <li className="list-group-item">
-                        <Link className="nav-link" to="#">Create Category</Link>
+                        <Link className="nav-link" to="/admin/create-category">Create Category</Link>
                     </li>
                     <li className="list-group-item">
-                        <Link className="nav-link" to="#">Create Product</Link>
+                        <Link className="nav-link" to="/admin/create-product">Create Product</Link>
                     </li>
                 </ul>
             </div>

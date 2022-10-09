@@ -3,6 +3,7 @@ const { Product, validate } = require('../models/product');
 const formidable = require('formidable');
 const fs = require('fs');
 const { expression } = require('joi');
+const { emitWarning } = require('process');
 
 module.exports.createProduct = async (req, res) => {
     let form = new formidable.IncomingForm();
@@ -89,7 +90,7 @@ module.exports.updateProductById = async (req, res) => {
                 product.photo.data = data;
                 product.photo.contentType = files.photo.type;
                 product.save((err, result) => {
-                    if (err) return res.status(500).send("Product Updated Failed!")
+                    if (err) return res.status(500).send("Product Update Failed!")
                     return res.status(201).send({
                         message: "Product Updated Successfully!",
                     })
@@ -97,7 +98,7 @@ module.exports.updateProductById = async (req, res) => {
             })
         } else {
             product.save((err, result) => {
-                if (err) return res.status(500).send("Product Updated Failed!")
+                if (err) return res.status(500).send("Product Update Failed!")
                 return res.status(201).send({
                     message: "Product Updated Successfully!",
                 })
@@ -122,8 +123,9 @@ module.exports.updateProductById = async (req, res) => {
 //Filter product
 module.exports.filterProducts = async (req, res) => {
     let order = req.body.order === 'desc' ? -1 : 1;
-    let sortBy = req.body.sortBy ? req.query.sortBy : '_id';
-    let limit = req.body.limit ? parseInt(req.query.limit) : 10;
+    let sortBy = req.body.sortBy ? req.body.sortBy : '_id';
+    let limit = req.body.limit ? parseInt(req.body.limit) : 30;
+    let skip = req.body.skip ? parseInt(req.body.skip) : 0;
     let filters = req.body.filters;
     let args = {};
     for (let key in filters) {
@@ -144,9 +146,6 @@ module.exports.filterProducts = async (req, res) => {
             }
         }
     }
-
-    const product = await Product.find().select({ photo: 0 }).populate('category', 'name')
-        .sort({ [sortBy]: order }).skip(skip).limit(limit)
-
+    const product = await Product.find(args).select({ photo: 0 }).limit(limit).sort({ [sortBy]: order }).skip(skip).populate('category', 'name')
     return res.status(200).send(product);
 }
