@@ -11,7 +11,7 @@ const ProductDetails = (props) => {
     const [product, setProduct] = useState({});
     const [error, setError] = useState(false);
     const [success, setSuccess] = useState(false);
-    const [photoUrl, setphotoUrl] = useState(`http://${API}/product/photo/`);
+    const [photoUrl, setphotoUrl] = useState(`${API}/product/photo/`);
     const { id } = useParams();
 
 

@@ -2,7 +2,7 @@ import { API } from '../utils/config';
 import axios from 'axios';
 
 export const createCategory = (token, data) => {
-    return axios.post(`http://${API}/category`, data, {
+    return axios.post(`${API}/category`, data, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
@@ -11,7 +11,7 @@ export const createCategory = (token, data) => {
 }
 
 export const createProduct = (token, data) => {
-    return axios.post(`http://${API}/product`, data, {
+    return axios.post(`${API}/product`, data, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
@@ -20,5 +20,5 @@ export const createProduct = (token, data) => {
 }
 
 export const getCategories = () => {
-    return axios.get(`http://${API}/category`)
+    return axios.get(`${API}/category`)
 }

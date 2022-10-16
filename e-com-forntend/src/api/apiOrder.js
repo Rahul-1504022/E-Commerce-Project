@@ -2,7 +2,7 @@ import axios from "axios";
 import { API } from "../utils/config";
 
 export const addToCart = (token, cartItem) => {
-    return axios.post(`http://${API}/cart`, cartItem, {
+    return axios.post(`${API}/cart`, cartItem, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
@@ -11,7 +11,7 @@ export const addToCart = (token, cartItem) => {
 }
 
 export const getCartItems = (token) => {
-    return axios.get(`http://${API}/cart`, {
+    return axios.get(`${API}/cart`, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
@@ -20,7 +20,7 @@ export const getCartItems = (token) => {
 }
 
 export const updateCartItems = (token, cartItem) => {
-    return axios.put(`http://${API}/cart`, cartItem, {
+    return axios.put(`${API}/cart`, cartItem, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
@@ -29,7 +29,7 @@ export const updateCartItems = (token, cartItem) => {
 }
 
 export const deleteCartItem = (token, cartItem) => {
-    return axios.delete(`http://${API}/cart/${cartItem._id}`, {
+    return axios.delete(`${API}/cart/${cartItem._id}`, {
         headers: {
             "Authorization": `Bearer ${token}`,
         }
@@ -37,7 +37,7 @@ export const deleteCartItem = (token, cartItem) => {
 }
 
 export const getProfile = (token) => {
-    return axios.get(`http://${API}/profile`, {
+    return axios.get(`${API}/profile`, {
         headers: {
             "Authorization": `Bearer ${token}`,
         }
@@ -45,7 +45,7 @@ export const getProfile = (token) => {
 }
 
 export const updateProfile = (token, data) => {
-    return axios.post(`http://${API}/profile`, data, {
+    return axios.post(`${API}/profile`, data, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
@@ -56,7 +56,7 @@ export const updateProfile = (token, data) => {
 
 //payment initialization
 export const initPayment = token => {
-    return axios.get(`http://${API}/payment`, {
+    return axios.get(`${API}/payment`, {
         headers: {
             "Authorization": `Bearer ${token}`,
         }

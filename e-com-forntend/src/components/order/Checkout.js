@@ -31,6 +31,7 @@ const Checkout = () => {
     }
 
     useEffect(() => {
+
         getProfile(userInfo().token)
             .then(response => setValues(response.data))
             .catch(err => { })
@@ -46,7 +47,7 @@ const Checkout = () => {
         return sum;
     }
 
-    const shippinDetails = () => (
+    const shippingDetails = () => (
         <>
             To,
             <br /> <b>{userInfo().name}</b>
@@ -57,7 +58,7 @@ const Checkout = () => {
         </>
     )
 
-    if (address1 && city && phone && postcode && country)
+    if (address1 && city && phone && postcode && country) {
         return (<>
             <Layout title="Checkout" description="Complete your order!" className="container">
                 <nav aria-label="breadcrumb">
@@ -74,7 +75,7 @@ const Checkout = () => {
                             <div className="card mb-5" style={{ height: 'auto' }}>
                                 <div className="card-header">Shipping Details</div>
                                 <div className="card-body">
-                                    {shippinDetails()}
+                                    {shippingDetails()}
                                 </div>
                             </div>
                         </div>
@@ -97,7 +98,10 @@ const Checkout = () => {
                 </div>
             </Layout>
         </>);
-    else return <></>;
+    }
+    else {
+        return <></>
+    }
 }
 
 export default Checkout;

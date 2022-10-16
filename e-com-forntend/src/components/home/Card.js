@@ -20,7 +20,7 @@ const Card = ({ product, handleAddToCart }) => {
         <div className="col-md-3 col-sm-4 col-xs-12 mb-3">
             <div className="card">
                 <img
-                    src={`http://${API}/product/photo/${product._id}`}
+                    src={`${API}/product/photo/${product._id}`}
                     alt={product.name}
                     style={imgStyle}
                     className="card-img-top"

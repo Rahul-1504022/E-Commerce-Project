@@ -10,7 +10,7 @@ const CartItem = ({ item, serial, increaseItem, decreaseItem, removeItem }) => {
     return (
         <tr>
             <th scope="row">{serial}</th>
-            <th><img src={`http://${API}/product/photo/${item.product._id}`} style={imgStyle} /></th>
+            <th><img src={`${API}/product/photo/${item.product._id}`} style={imgStyle} /></th>
             <td>{item.product ? item.product.name : ""}</td>
             <td>
                 <button className="btn btn-outline-primary btn-sm" onClick={decreaseItem}>-</button>

@@ -2,15 +2,15 @@ import { API } from '../utils/config';
 import axios from 'axios';
 
 export const getProducts = (sortBy, order, limit) => {
-    return axios.get(`http://${API}/product?sortBy=${sortBy}&order=${order}&limit=${limit}`)
+    return axios.get(`${API}/product?sortBy=${sortBy}&order=${order}&limit=${limit}`)
 }
 
 export const getProductDetails = (id) => {
-    return axios.get(`http://${API}/product/${id}`)
+    return axios.get(`${API}/product/${id}`)
 }
 
 export const getCategories = () => {
-    return axios.get(`http://${API}/category`)
+    return axios.get(`${API}/category`)
 }
 
 export const getFilteredProducts = (skip, limit, filters = {}, order, sortBy) => {
@@ -21,7 +21,7 @@ export const getFilteredProducts = (skip, limit, filters = {}, order, sortBy) =>
         skip: skip,
         filters: { ...filters }
     }
-    return axios.post(`http://${API}/product/filter`, data, {
+    return axios.post(`${API}/product/filter`, data, {
         headers: {
             "Content-Type": "application/json"
         }
