@@ -26,14 +26,19 @@ const Checkout = () => {
 
     const loadCart = () => {
         getCartItems(userInfo().token)
-            .then(response => setOrderItems(response.data))
-            .catch((err => console.log(err)));
+            .then(response => {
+                return setOrderItems(response.data)
+            })
+            .catch(err => { });
     }
+
 
     useEffect(() => {
 
         getProfile(userInfo().token)
-            .then(response => setValues(response.data))
+            .then(response => {
+                return setValues(response.data);
+            })
             .catch(err => { })
         loadCart();
     }, []);
@@ -59,14 +64,15 @@ const Checkout = () => {
     )
 
     if (address1 && city && phone && postcode && country) {
+
         return (<>
             <Layout title="Checkout" description="Complete your order!" className="container">
                 <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><Link href="#">Order</Link></li>
-                        <li class="breadcrumb-item"><Link href="#">Cart</Link></li>
-                        <li class="breadcrumb-item"><Link href="#">Shipping Address</Link></li>
-                        <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item"><Link to="#">Order</Link></li>
+                        <li className="breadcrumb-item"><Link to="/cart">Cart</Link></li>
+                        <li className="breadcrumb-item"><Link to="/shipping">Shipping Address</Link></li>
+                        <li className="breadcrumb-item active" aria-current="page">Checkout</li>
                     </ol>
                 </nav>
                 <div className="container">

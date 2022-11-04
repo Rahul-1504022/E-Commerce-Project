@@ -6,6 +6,9 @@ import { getProductDetails } from '../../api/apiProduct';
 import { showSuccess, showError } from '../../utils/messages';
 import { addToCart } from '../../api/apiOrder';
 import { isAuthnticated, userInfo } from '../../utils/auth';
+import { newComment, loadComment } from "../../api/apiComment";
+import LoadComment from "./LoadComment";
+import { Form, Input, Label } from 'reactstrap';
 
 const ProductDetails = (props) => {
     const [product, setProduct] = useState({});
@@ -13,18 +16,48 @@ const ProductDetails = (props) => {
     const [success, setSuccess] = useState(false);
     const [photoUrl, setphotoUrl] = useState(`${API}/product/photo/`);
     const { id } = useParams();
-
+    const [comment, setComment] = useState("");
+    const [allComment, setAllComment] = useState([]);
+    const [isAuthnticated, setIsAuthenticated] = useState(localStorage.getItem("jwt") ? true : false);
 
     useEffect(() => {
         getProductDetails(id)
             .then(response => {
                 return setProduct(response.data)
             })
-            .catch(err => setError("Failed to load products"))
-    }, [])
+            .catch(err => setError("Failed to load products"));
+
+        loadComment(id)
+            .then(response => {
+                return setAllComment(response.data);
+            })
+            .catch(err => setError("Failed to load comments"));
+
+    }, [success, error]);
+
+    // useEffect(() => {
+    //     loadComment(id)
+    //         .then(response => {
+    //             return setAllComment(response.data);
+    //         })
+    //         .catch(err => setError("Failed to load comments"));
+    // }, []);
+
+    let loadAllComment = null;
+    if (allComment.length !== 0) {
+        loadAllComment = allComment.map(comment => {
+            return (
+                <LoadComment
+                    key={comment._id}
+                    comment={comment}
+                />
+            )
+        })
+
+    }
 
     const handleAddToCart = product => () => {
-        if (isAuthnticated()) {
+        if (isAuthnticated) {
             setError(false);
             setSuccess(false);
             const user = userInfo();
@@ -34,7 +67,7 @@ const ProductDetails = (props) => {
                 price: product.price,
             }
             addToCart(user.token, cartItem)
-                .then(response => setSuccess(true))
+                .then(response => setSuccess("Add to cart Successfully!"))
                 .catch(error => {
                     if (error.response) {
                         setError(error.response.data);
@@ -48,38 +81,94 @@ const ProductDetails = (props) => {
         }
     }
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        let data = {
+            productId: product._id,
+            comment: comment,
+        }
+        setComment('');
+        newComment(userInfo().token, data)
+            .then(response => {
+                if (response.status === 200) {
+                    // setSuccess(response.data);
+                    setSuccess("Comment added Successfully");
+                }
+            })
+            .catch(error => {
+                // console.log(error);
+                return setError("Comment Upload Failed")
+            });
+    }
+
+    const handleChange = (e) => {
+        setComment(e.target.value);
+    }
+
+    const commentForm = (
+        <Form onSubmit={handleSubmit}>
+            <div className="form-group">
+                <Label className="text-muted">Your Comment:</Label>
+                <Input name='comment' type="text-area" className="form-control"
+                    value={comment} onChange={handleChange} required />
+            </div>
+            <button type="submit" className="btn btn-outline-primary" style={{ marginTop: "10px" }}>Submit</button>
+        </Form>
+    )
+    let productDetailsShow = null;
+    if (Object.keys(product).length !== 0 && product.constructor === Object) {
+        productDetailsShow = (<div className="row container">
+            <div className="col-6">
+                <img
+                    src={`${photoUrl}${product._id}`}
+                    alt={product.name}
+                    width="100%"
+                />
+            </div>
+            <div className="col-6">
+                <h3>{product.name}</h3>
+                <span style={{ fontSize: 20 }}>&#2547;</span>{product.price}
+                <p>{product.quantity ? <span className="badge badge-pill badge-primary" style={{ color: "green" }}>In Stock</span> : <span className="badge badge-pill badge-danger" style={{ color: "red" }}>Out of Stock</span>}</p>
+                <p>{product.description}</p>
+                {product.quantity ? <>
+                    &nbsp;<button className="btn btn-outline-primary btn-md" onClick={handleAddToCart(product)}>Add to Cart</button>
+                </> : ""}
+            </div>
+        </div>)
+    }
+
     return (
         <Layout title="Product Page">
             <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><Link to="/home">Home</Link></li>
-                    <li class="breadcrumb-item"><a href="#">Product</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{product.category ? product.category.name : ""}</li>
+                <ol className="breadcrumb">
+                    <li className="breadcrumb-item"><Link to="/home">Home</Link></li>
+                    <li className="breadcrumb-item"><Link to="#">Product</Link></li>
+                    <li className="breadcrumb-item active" aria-current="page">{product.category ? product.category.name : ""}</li>
                 </ol>
             </nav>
             <div>
-                {showSuccess(success, 'Item Added to Cart!')}
+                {showSuccess(success, success)}
                 {showError(error, error)}
             </div>
-            <div className="row container">
-                <div className="col-6">
-                    <img
-                        src={`${photoUrl}${product._id}`}
-                        alt={product.name}
-                        width="100%"
-                    />
-                </div>
-                <div className="col-6">
-                    <h3>{product.name}</h3>
-                    <span style={{ fontSize: 20 }}>&#2547;</span>{product.price}
-                    <p>{product.quantity ? <span className="badge badge-pill badge-primary" style={{ color: "green" }}>In Stock</span> : <span className="badge badge-pill badge-danger" style={{ color: "red" }}>Out of Stock</span>}</p>
-                    <p>{product.description}</p>
-                    {product.quantity ? <>
-                        &nbsp;<button className="btn btn-outline-primary btn-md" onClick={handleAddToCart(product)}>Add to Cart</button>
-                    </> : ""}
+            {productDetailsShow}
+            <div className='row justify-content-center rounded border border-info m-4 p-3'>
+                <div className='col-sm-8'>
+                    <h4>Comments</h4>
+                    <hr />
+                    {loadAllComment ? loadAllComment : "No Comments yet......."}
                 </div>
             </div>
-        </Layout>
+            {isAuthnticated ?
+                <div className='row justify-content-center m-5 p-4'>
+                    <div className='col-sm-6'>
+                        {commentForm}
+                    </div>
+                </div> :
+                <div className='row justify-content-center m-2 p-4'>
+                    <h6 className='col-sm-4'>Please <Link to="/login">Login</Link> to comment
+                    </h6>
+                </div>}
+        </Layout >
     )
 }
 

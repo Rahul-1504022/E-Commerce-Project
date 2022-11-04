@@ -1,7 +1,12 @@
 import { API } from '../utils/config';
 import axios from 'axios';
 
+export const getAllProduct = () => {
+    return axios.get(`${API}/product`);
+}
+
 export const getProducts = (sortBy, order, limit) => {
+    // const limit = 3;
     return axios.get(`${API}/product?sortBy=${sortBy}&order=${order}&limit=${limit}`)
 }
 
@@ -14,6 +19,7 @@ export const getCategories = () => {
 }
 
 export const getFilteredProducts = (skip, limit, filters = {}, order, sortBy) => {
+
     const data = {
         order: order,
         sortBy: sortBy,

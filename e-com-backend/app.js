@@ -10,7 +10,9 @@ const error = require('./middlewares/error');
 const productRouter = require('./routers/productRouter');
 const cartRouter = require('./routers/cartRouter');
 const profileRouter = require('./routers/profileRouter');
-const paymentRouter = require('./routers/paymentRouter')
+const paymentRouter = require('./routers/paymentRouter');
+const commentRouter = require('./routers/commentRouter');
+
 app.use(express.json());//convert to json format
 app.use(cors());
 app.use(compression());
@@ -27,6 +29,7 @@ app.use('/api/product', productRouter);
 app.use('/api/cart', cartRouter);
 app.use('/api/profile', profileRouter);
 app.use('/api/payment', paymentRouter);
+app.use('/api/comment', commentRouter);
 //using middleware for promise return type error handling
 //use it after router function 
 app.use(error);

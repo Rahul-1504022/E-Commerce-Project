@@ -4,6 +4,7 @@ const formidable = require('formidable');
 const fs = require('fs');
 const { expression } = require('joi');
 const { emitWarning } = require('process');
+const { Comment } = require('../models/comments');
 
 module.exports.createProduct = async (req, res) => {
     let form = new formidable.IncomingForm();

@@ -2,16 +2,19 @@ import { useState, useEffect } from 'react';
 import Layout from '../Layout';
 import Card from './Card';
 import { showError, showSuccess } from '../../utils/messages';
-import { getCategories, getProducts, getFilteredProducts } from '../../api/apiProduct';
+import { getCategories, getProducts, getFilteredProducts, getAllProduct } from '../../api/apiProduct';
 import CheckBox from './CheckBox';
 import RadioBox from './RadioBox';
 import { prices } from '../../utils/price';
 import { isAuthnticated, userInfo } from '../../utils/auth';
 import { addToCart } from '../../api/apiOrder';
+import OrderBy from './OrderBy';
+import SortBy from './SortBy';
 
 const Home = () => {
+    const [productLength, setProductLength] = useState();
     const [products, setProducts] = useState([]);
-    const [limit, setLimit] = useState(30);
+    const [limit, setLimit] = useState(4);
     const [order, setOrder] = useState('desc');
     const [sortBy, setSortBy] = useState('createdAt');
     const [skip, setskip] = useState(0);
@@ -22,9 +25,13 @@ const Home = () => {
         category: [],
         price: []   //according to backend API
     });
-
+    const [addLimitButton, setAddLimitButton] = useState(false);
 
     useEffect(() => {
+        getAllProduct()
+            .then(response => setProductLength(response.data.length))
+            .catch(err => setError("Failed to load products!"));
+
         getProducts(sortBy, order, limit)
             .then(response => setProducts(response.data))
             .catch(err => setError("Failed to load products!"));
@@ -36,7 +43,16 @@ const Home = () => {
             .catch(error => {
                 setError("Failed to load categories!")
             });
-    }, [])
+    }, []);
+
+    //call filter api each time when [limit, order , categories , filters] change
+    useEffect(() => {
+        getFilteredProducts(skip, limit, filters, order, sortBy)
+            .then(response => {
+                return setProducts(response.data)
+            })
+            .catch(error => setError("Failed to load products!"))
+    }, [limit, order, categories, filters, sortBy]) //very useful
 
     const handleAddToCart = product => () => {
         if (isAuthnticated()) {
@@ -75,10 +91,24 @@ const Home = () => {
                 }
             })
         }
+        if (filterBy === 'limitAdd') {
+            setLimit((prevLimit) => prevLimit + 3);
+            if (productLength <= limit) {
+                setAddLimitButton(true);
+            }
+        }
+        if (filterBy === 'orderBy') {
+            if (myfilters === 'desc') {
+                setOrder(myfilters);
+            } else {
+                setOrder(myfilters);
+            }
+        }
+        if (filterBy === 'sortBy') {
+            if (myfilters === 'price')
+                setSortBy(myfilters);
+        }
         setFilters(newFilters);
-        getFilteredProducts(skip, limit, newFilters, order, sortBy)
-            .then(response => setProducts(response.data))
-            .catch(error => setError("Failed to load products!"))
     }
 
     const showFilters = () => {
@@ -102,10 +132,19 @@ const Home = () => {
                     </div>
 
                 </div>
+                <div className='col-sm-2'>
+                    <OrderBy
+                        OrderBy={order}
+                        order={(myfilters) => handleFilters(myfilters, 'orderBy')} />
+                </div>
+                <div className='col-sm-2'>
+                    <SortBy
+                        sortBy={sortBy}
+                        sort={(myfilters) => handleFilters(myfilters, 'sortBy')} />
+                </div>
             </div>
         </>)
     }
-
     return (
         <Layout title="Home Page" className="container-fluid">
             {showFilters()}
@@ -116,6 +155,14 @@ const Home = () => {
             <div className="row">
                 {products && products.map(product => <Card product={product} key={product._id} handleAddToCart={handleAddToCart(product)} />)}
             </div>
+            <div className='row justify-content-sm-center'>
+                <button className='btn btn-outline-primary col-sm-3'
+                    disabled={addLimitButton}
+                    onClick={() => handleFilters(null, 'limitAdd')}>
+                    Load More
+                </button>
+            </div>
+
         </Layout>
     )
 }

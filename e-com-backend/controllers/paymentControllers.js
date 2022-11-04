@@ -17,10 +17,19 @@ module.exports.ipn = async (req, res) => {
     if (payment['status'] === "VALID") {
         const order = await Order.updateOne({ transaction_id: tran_id }, { status: "Complete" });
         await CartItem.deleteMany(order.cartItems);
+    }
 
-    } else {
+    else if (payment['status'] === "FAILED") {
+        const order = await Order.updateOne({ transaction_id: tran_id }, { status: "Failed" });
+        // await CartItem.deleteMany(order.cartItems);
         await Order.deleteOne({ transaction_id: tran_id });
     }
+
+    else if (payment['status'] === "CANCELLED") {
+        const order = await Order.updateOne({ transaction_id: tran_id }, { status: "Pending" });
+        // await Order.deleteOne({ transaction_id: tran_id });
+    }
+
     await payment.save();
     return res.status(200).send("IPN");
 }
@@ -43,8 +52,8 @@ module.exports.initPayment = async (req, res) => {
     // Set the urls
     payment.setUrls({
         success: "https://desolate-retreat-72840.herokuapp.com/api/payment/success", // If payment Succeed
-        fail: "yoursite.com/fail", // If payment failed
-        cancel: "yoursite.com/cancel", // If user cancel payment
+        fail: "https://desolate-retreat-72840.herokuapp.com/api/payment/failed", // If payment failed
+        cancel: "https://desolate-retreat-72840.herokuapp.com/api/payment/cancel", // If user cancel payment
         ipn: "https://desolate-retreat-72840.herokuapp.com/api/payment/ipn", // SSLCommerz will send http post request in this link
     });
 
@@ -89,10 +98,10 @@ module.exports.initPayment = async (req, res) => {
         product_category: "General",
         product_profile: "general",
     });
-    let response = await payment.paymentInit();
+    let response = await payment.paymentInit(); //initiate payment
     let order = new Order({ cartItems: cartItems, user: userID, transaction_id: tran_id, address: profile });
 
-    if (response.status === "SUCCESS") {
+    if (response.status === "SUCCESS") {  //server response with sessionkey
         order['sessionKey'] = response['sessionkey'];
         await order.save();
     }
@@ -101,5 +110,13 @@ module.exports.initPayment = async (req, res) => {
 }
 
 module.exports.paymentSuccess = async (req, res) => {
-    res.sendFile(path.join(__basedir + "public/success.html"));
+    res.sendFile(path.join(__basedir, "public/success.html"));
+}
+
+module.exports.paymentFailed = async (req, res) => {
+    res.sendFile(path.join(__basedir, "public/failed.html"));
+}
+
+module.exports.paymentCanceled = async (req, res) => {
+    res.sendFile(path.join(__basedir, "public/cancel.html"));
 }

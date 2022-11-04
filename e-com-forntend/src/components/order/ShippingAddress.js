@@ -93,10 +93,10 @@ const ShippingAddress = () => {
     return (<>
         <Layout title="Shipping Address" description="Complete your order!" className="container">
             <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><Link href="#">Order</Link></li>
-                    <li class="breadcrumb-item"><Link href="#">Cart</Link></li>
-                    <li class="breadcrumb-item active" aria-current="page">Shipping Address</li>
+                <ol className="breadcrumb">
+                    <li className="breadcrumb-item"><Link to="#">Order</Link></li>
+                    <li className="breadcrumb-item"><Link to="/cart">Cart</Link></li>
+                    <li className="breadcrumb-item active" aria-current="page">Shipping Address</li>
                 </ol>
             </nav>
             {showError(error, error)}

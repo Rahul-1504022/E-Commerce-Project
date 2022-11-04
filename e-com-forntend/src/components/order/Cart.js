@@ -67,7 +67,6 @@ const Cart = () => {
     const getCartTotal = () => {
         const arr = cartItems.map(item => item.price * item.count);
         const sum = arr.reduce((a, b) => a + b, 0);
-        console.log(sum);
         return sum;
     }
 
@@ -90,9 +89,9 @@ const Cart = () => {
         <Layout title="Your Cart" description="Hurry up! Place your order!" className="container">
             {showError(error, error)}
             <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Order</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Cart</li>
+                <ol className="breadcrumb">
+                    <li className="breadcrumb-item"><a href="#">Order</a></li>
+                    <li className="breadcrumb-item active" aria-current="page">Cart</li>
                 </ol>
             </nav>
             <div className="container my-5">
@@ -104,12 +103,12 @@ const Cart = () => {
                             <th scope="col">Product Name</th>
                             <th scope="col">Quantity</th>
                             <th scope="col" align="right">Price</th>
-                            <th scop="col">Remove</th>
+                            <th scope="col">Remove</th>
                         </tr>
                     </thead>
                     <tbody>
                         {cartItems.map((item, index) => <CartItem
-                            key={item.id}
+                            key={item._id}
                             item={item}
                             serial={index + 1}
                             increaseItem={increaseItem(item)}

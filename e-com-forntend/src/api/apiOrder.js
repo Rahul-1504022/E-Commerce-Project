@@ -39,6 +39,7 @@ export const deleteCartItem = (token, cartItem) => {
 export const getProfile = (token) => {
     return axios.get(`${API}/profile`, {
         headers: {
+            "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
         }
     })

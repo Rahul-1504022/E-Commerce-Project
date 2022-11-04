@@ -35,6 +35,7 @@ export const userInfo = () => {
 export const signout = cb => {
     if (typeof window !== 'undefined') {
         localStorage.removeItem('jwt');
+        window.location.reload();
         cb();
     }
 }
