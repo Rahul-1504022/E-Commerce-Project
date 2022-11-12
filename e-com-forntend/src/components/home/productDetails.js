@@ -17,6 +17,7 @@ const ProductDetails = (props) => {
     const [photoUrl, setphotoUrl] = useState(`${API}/product/photo/`);
     const { id } = useParams();
     const [comment, setComment] = useState("");
+    const [rating, setRating] = useState();
     const [allComment, setAllComment] = useState([]);
     const [isAuthnticated, setIsAuthenticated] = useState(localStorage.getItem("jwt") ? true : false);
 
@@ -34,14 +35,6 @@ const ProductDetails = (props) => {
             .catch(err => setError("Failed to load comments"));
 
     }, [success, error]);
-
-    // useEffect(() => {
-    //     loadComment(id)
-    //         .then(response => {
-    //             return setAllComment(response.data);
-    //         })
-    //         .catch(err => setError("Failed to load comments"));
-    // }, []);
 
     let loadAllComment = null;
     if (allComment.length !== 0) {
@@ -86,23 +79,30 @@ const ProductDetails = (props) => {
         let data = {
             productId: product._id,
             comment: comment,
+            rating: rating,
         }
         setComment('');
+        setRating();
         newComment(userInfo().token, data)
             .then(response => {
                 if (response.status === 200) {
-                    // setSuccess(response.data);
+                    console.log(response);
                     setSuccess("Comment added Successfully");
                 }
             })
             .catch(error => {
-                // console.log(error);
+                console.log(error);
                 return setError("Comment Upload Failed")
             });
     }
 
     const handleChange = (e) => {
-        setComment(e.target.value);
+        if (e.target.name === "comment") {
+            setComment(e.target.value);
+        } else {
+            setRating(parseInt(e.target.value));
+        }
+
     }
 
     const commentForm = (
@@ -111,6 +111,16 @@ const ProductDetails = (props) => {
                 <Label className="text-muted">Your Comment:</Label>
                 <Input name='comment' type="text-area" className="form-control"
                     value={comment} onChange={handleChange} required />
+                <br />
+                <Input type='radio' id='rate1' value="1" name='rating' onChange={handleChange} /><Label htmlFor='rate1'>&nbsp; 1 </Label>
+                &nbsp;&nbsp;&nbsp;
+                <Input type='radio' id='rate2' value="2" name='rating' onChange={handleChange} /><Label htmlFor='rate2'>&nbsp;2</Label>
+                &nbsp;&nbsp;&nbsp;
+                <Input type='radio' id='rate3' value="3" name='rating' onChange={handleChange} /><Label htmlFor='rate3'>&nbsp;3</Label>
+                &nbsp;&nbsp;&nbsp;
+                <Input type='radio' id='rate4' value="4" name='rating' onChange={handleChange} /><Label htmlFor='rate4'>&nbsp;4</Label>
+                &nbsp;&nbsp;&nbsp;
+                <Input type='radio' id='rate5' value="5" name='rating' onChange={handleChange} /><Label htmlFor='rate5'>&nbsp;5</Label>
             </div>
             <button type="submit" className="btn btn-outline-primary" style={{ marginTop: "10px" }}>Submit</button>
         </Form>

@@ -12,6 +12,7 @@ const commentSchema = new Schema({
         required: true,
     },
     comment: String,
+    rating: Number,
 });
 
 module.exports.Comment = new model('Comment', commentSchema); 

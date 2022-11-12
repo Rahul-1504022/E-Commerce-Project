@@ -1,12 +1,24 @@
 const _ = require('lodash');
 const { Comment } = require('../models/comments');
+const { Product } = require('../models/product');
+const { Rating } = require('../models/rating');
 
 module.exports.postComment = async (req, res) => {
     const userId = req.user._id;
-    const comment = _.pick(req.body, ['productId', 'comment']);
+    const comment = _.pick(req.body, ['productId', 'comment', 'rating']);
+    const productRating = _.pick(req.body, ['productId', 'rating']);
     comment["userId"] = userId;
     let newComment = new Comment(comment);
-    await newComment.save();
+    let newRating = new Rating(productRating);
+    await newComment.save(); //save new comment
+    await newRating.save(); //save rating
+
+    let calculateRating = await Rating.find({ productId: req.body.productId });
+    calculateRating = calculateRating.map(item => parseInt(item.rating));
+    const ratingLength = calculateRating.length;
+    let ratingSum = calculateRating.reduce((ratingSum, rating) => ratingSum + rating, 0);
+    const finalRating = (ratingSum / ratingLength).toFixed(2);
+    await Product.updateOne({ _id: req.body.productId }, { rating: finalRating });
     return res.status(200).send("Submit Comment Successfully!");
 
 }

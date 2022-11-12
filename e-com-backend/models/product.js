@@ -15,6 +15,10 @@ module.exports.Product = new model('Product', Schema({
     photo: {
         data: Buffer, //convert photo into binary
         contentType: String,
+    },
+    rating: {
+        type: Number,
+        default: 0,
     }
 }, { timestamps: true }));
 
