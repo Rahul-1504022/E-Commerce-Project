@@ -14,6 +14,7 @@ import Cart from "./order/Cart";
 import ShippingAddress from "./order/ShippingAddress";
 import Checkout from "./order/Checkout";
 import Payment from "./order/Payment";
+import Coupon from "./admin/Coupon";
 
 const Main = () => {
     return (
@@ -42,6 +43,14 @@ const Main = () => {
                     <AdminRoute>
                         <CreateCategory />
                     </AdminRoute>)} />
+
+            <Route
+                path="/admin/coupon"
+                element={(
+                    <AdminRoute>
+                        <Coupon />
+                    </AdminRoute>)} />
+
             <Route
                 path="/admin/create-product"
                 element={(

@@ -105,8 +105,10 @@ const Home = () => {
             }
         }
         if (filterBy === 'sortBy') {
-            if (myfilters === 'price')
-                setSortBy(myfilters);
+            setSortBy(myfilters);
+            //     if (myfilters === 'price')
+            //         setSortBy(myfilters);
+            // 
         }
         setFilters(newFilters);
     }

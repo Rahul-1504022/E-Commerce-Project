@@ -27,7 +27,7 @@ const Card = ({ product, handleAddToCart }) => {
                 />
                 <div className="card-body">
                     <div style={{ minHeight: "3em" }}>
-                        <p style={titleStyle}>{product.name}</p>
+                        <p style={titleStyle}>{product.name}<br /><img src='Gold_Star.svg.png' alt="start" width="16px" height="16px" />&nbsp;{product.rating}/5</p>
                     </div>
                     <span style={{ fontSize: 20 }}>&#2547;</span>{product.price}
                     <p>{product.quantity ? (<span className="badge badge-pill badge-primary">In Stock</span>) : (<span className="badge badge-pill badge-danger">Out of Stock</span>)}</p>

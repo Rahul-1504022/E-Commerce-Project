@@ -2,9 +2,9 @@ import Layout from "../Layout";
 import { useEffect, useState } from "react";
 import { login } from "../../api/apiAuth";
 import { showError, showLoading } from "../../utils/messages";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { authenticate, isAuthnticated, userInfo } from "../../utils/auth";
-
+import { API } from "../../utils/config";
 
 const Login = () => {
 
@@ -113,6 +113,7 @@ const Login = () => {
             <hr />
             {signInForm()}
             <hr />
+            <button className="btn btn-primary">Google Login</button>
         </Layout>
     )
 }

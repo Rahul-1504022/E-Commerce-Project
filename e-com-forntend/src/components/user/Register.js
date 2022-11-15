@@ -2,7 +2,9 @@ import Layout from "../Layout";
 import { useState } from "react";
 import { showError, showLoading } from "../../utils/messages";
 import { register } from "../../api/apiAuth";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { API } from "../../utils/config";
+import axios from "axios";
 
 const Register = () => {
     const [values, setValues] = useState({
@@ -58,6 +60,12 @@ const Register = () => {
             })
     }
 
+    const googleLogin = () => {
+        axios.get(`${API}/auth/google`)
+            .then(response => console.log(response))
+            .catch(error => console.log(error))
+    }
+
     const signUpForm = () => (
         <form>
             <div className="form-group">
@@ -77,6 +85,7 @@ const Register = () => {
             </div>
             <button type="submit" className="btn btn-primary" onClick={handleSubmit} disabled={disabled}>Create Account</button>
         </form>
+
     );
 
     const showSuccess = () => {
@@ -98,6 +107,7 @@ const Register = () => {
             <hr />
             {signUpForm()}
             <hr />
+            <button className="btn btn-primary" onClick={googleLogin}>Google Login</button>
         </Layout>
     )
 }
