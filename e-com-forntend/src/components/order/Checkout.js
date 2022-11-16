@@ -3,6 +3,7 @@ import { getCartItems, getProfile } from '../../api/apiOrder';
 import { userInfo } from '../../utils/auth';
 import Layout from '../Layout';
 import { Link } from 'react-router-dom';
+import UserCoupon from './UserCoupon';
 
 const Checkout = () => {
     const [orderItems, setOrderItems] = useState([]);
@@ -14,6 +15,7 @@ const Checkout = () => {
         postcode: '',
         country: ''
     });
+    const [coupon, setCoupon] = useState([]);
 
     const {
         phone,
@@ -23,6 +25,16 @@ const Checkout = () => {
         postcode,
         country
     } = values;
+
+    let showCoupon = null;
+    if (coupon !== []) {
+        showCoupon = coupon.map(item => (
+            <UserCoupon
+                key={item._id}
+                coupon={item}
+            />
+        ))
+    }
 
     const loadCart = () => {
         getCartItems(userInfo().token)
@@ -101,6 +113,7 @@ const Checkout = () => {
                             <p><Link className="btn btn-warning btn-md" to="/payment">Make Payment</Link></p>
                         </div>
                     </div>
+                    <div></div>
                 </div>
             </Layout>
         </>);
