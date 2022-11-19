@@ -86,7 +86,6 @@ const ProductDetails = (props) => {
         newComment(userInfo().token, data)
             .then(response => {
                 if (response.status === 200) {
-                    console.log(response);
                     setSuccess("Comment added Successfully");
                 }
             })

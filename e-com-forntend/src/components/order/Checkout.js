@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { getCartItems, getProfile } from '../../api/apiOrder';
+import { getCartItems, getProfile, updateCartItems } from '../../api/apiOrder';
 import { userInfo } from '../../utils/auth';
 import Layout from '../Layout';
 import { Link } from 'react-router-dom';
 import UserCoupon from './UserCoupon';
+import { getAllCoupon } from '../../api/apiCoupon';
 
 const Checkout = () => {
     const [orderItems, setOrderItems] = useState([]);
@@ -16,6 +17,8 @@ const Checkout = () => {
         country: ''
     });
     const [coupon, setCoupon] = useState([]);
+    const [discount, setDiscount] = useState(0);
+    const [couponNumber, setCouponNumber] = useState(0);
 
     const {
         phone,
@@ -25,15 +28,37 @@ const Checkout = () => {
         postcode,
         country
     } = values;
-
+    let sum = 0;
     let showCoupon = null;
+    let sumAfetrDiscount = 0;
+    // const getOrderTotal = () => {
+    if (orderItems !== []) {
+        const arr = orderItems.map(cartItem => cartItem.price * cartItem.count);
+        sum = arr.reduce((a, b) => a + b, 0);
+        sumAfetrDiscount = sum - discount;
+
+    }
+
+    // return sum;
+    // }
+
+
+    const addCoupon = data => {
+        setDiscount(data.discountAmount);
+        setCouponNumber(1);
+    }
     if (coupon !== []) {
-        showCoupon = coupon.map(item => (
-            <UserCoupon
-                key={item._id}
-                coupon={item}
-            />
-        ))
+        showCoupon = coupon.map(item => {
+            if (item.minPurchase <= sum) {
+                return (
+                    <UserCoupon
+                        key={item._id}
+                        coupon={item}
+                        addCoupon={(data) => addCoupon(data)}
+                    />
+                )
+            }
+        })
     }
 
     const loadCart = () => {
@@ -53,16 +78,16 @@ const Checkout = () => {
             })
             .catch(err => { })
         loadCart();
+
+        getAllCoupon(userInfo().token)
+            .then(response => setCoupon(response.data))
+            .catch(error => console.log(error));
+
     }, []);
 
 
 
 
-    const getOrderTotal = () => {
-        const arr = orderItems.map(cartItem => cartItem.price * cartItem.count);
-        const sum = arr.reduce((a, b) => a + b, 0);
-        return sum;
-    }
 
     const shippingDetails = () => (
         <>
@@ -105,15 +130,25 @@ const Checkout = () => {
                                     </ul>
                                 </div>
                                 <div className="card-footer">
+                                    <span className="float-left"><b>Order Amount</b></span>
+                                    <span className="float-right"><b>৳ {sum}</b></span>
+                                    <br />
+                                    <span className="float-left"><b>Discount</b></span>
+                                    <span className="float-right"><b>৳ {discount}</b></span>
+                                    <hr />
                                     <span className="float-left"><b>Order Total</b></span>
-                                    <span className="float-right"><b>৳ {getOrderTotal()}</b></span>
+                                    <span className="float-right"><b>৳ {sumAfetrDiscount}</b></span>
                                 </div>
                             </div>
                             <br />
-                            <p><Link className="btn btn-warning btn-md" to="/payment">Make Payment</Link></p>
+                            {/* <p><Link className="btn btn-warning btn-md" to={`/payment/${sumAfetrDiscount}`}>Make Payment</Link></p> */}
+                            <p><Link className="btn btn-warning btn-md" to={`/payment/${sumAfetrDiscount}`}>Make Payment</Link></p>
                         </div>
                     </div>
-                    <div></div>
+                    <hr />
+                    Available Coupon
+                    {couponNumber !== 1 ? <div className='row'>{showCoupon}</div> : <div>Maximum 1 Coupon can be used per order</div>}
+
                 </div>
             </Layout>
         </>);

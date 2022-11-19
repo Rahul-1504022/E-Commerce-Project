@@ -4,6 +4,7 @@ import { userInfo } from '../../utils/auth';
 import { useEffect, useState } from 'react';
 import { getOrderHistory } from '../../api/orderHistory';
 import LoadOrder from './LoadOrder';
+import { Card, CardBody, CardFooter, CardHeader } from 'reactstrap';
 
 const Dashboard = () => {
     const { name, email, role } = userInfo();
@@ -17,13 +18,29 @@ const Dashboard = () => {
 
     let loadOrderHistory = null;
     if (loadOrder !== []) {
-        console.log(loadOrder);
-        loadOrderHistory = loadOrder.map(order => (
-            <LoadOrder
-                key={order._id}
-                order={order}
-            />
-        ))
+        loadOrderHistory = loadOrder.map(order => {
+            const arr = order.cartItems.map(item => item.price * item.count);
+            const sum = arr.reduce((a, b) => a + b, 0);
+            return (
+                <div key={order._id}>
+                    <Card>
+                        <CardHeader>Order ID : {order._id}</CardHeader>
+                        <CardBody>
+                            <LoadOrder
+                                order={order}
+                            />
+                        </CardBody>
+                        <CardFooter>
+                            Payment Amount : <span style={{ color: "red", fontSize: "20px", fontWeight: "700" }}>{sum}</span> BDT
+                            <br />
+                            Payment Status :<span style={{ color: 'green' }}> Paid</span>
+                        </CardFooter>
+                    </Card>
+                    <br />
+
+                </div>
+            )
+        })
     }
 
 
@@ -71,6 +88,7 @@ const Dashboard = () => {
                 </div>
                 <div className="col-sm-9">
                     <UserInfo />
+                    <h4>Order History</h4><hr />
                     {loadOrderHistory}
                 </div>
             </div>

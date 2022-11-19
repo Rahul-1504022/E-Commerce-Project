@@ -1,4 +1,4 @@
-const { escapeRegExp } = require('lodash');
+
 const _ = require('lodash');
 const { CartItem } = require('../models/cartItem');
 

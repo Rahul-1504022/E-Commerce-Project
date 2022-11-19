@@ -17,7 +17,7 @@ const SortBy = ({ sortBy, sort }) => {
             <Input id="sortby" type="select" name="select" onChange={changeSort}>
                 <option value={null}>Select an option</option>
                 <option value="price">Price</option>
-                <option value="createdAt">Sold</option>
+                <option value="sold">Sold</option>
                 <option value="rating">Review</option>
             </Input>
         </>

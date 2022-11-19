@@ -1,13 +1,23 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { initPayment } from '../../api/apiOrder';
 import { userInfo } from '../../utils/auth'
+import { saveCoupon } from '../../api/apiCoupon';
 
 const Payment = () => {
     const [sessionSuccess, setSessionSuccess] = useState(false);
     const [failed, setFailed] = useState(false);
     const [redirectUrl, setRedirectUrl] = useState('');
+    const { finalAmount } = useParams();
+    const [message, setMessage] = useState("");
     useEffect(() => {
+        const data = {
+            finalAmount: finalAmount,
+        }
+        saveCoupon(userInfo().token, data)
+            .then(response => setMessage(response.data))
+            .catch(error => console.log("saveCoupon", error))
+
         initPayment(userInfo().token)
             .then(response => {
                 if (response.data.status === "SUCCESS") {

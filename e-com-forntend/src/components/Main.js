@@ -76,7 +76,7 @@ const Main = () => {
                         <Checkout />
                     </PrivateRoute>)} />
             <Route
-                path="/payment"
+                path="/payment/:finalAmount"
                 element={(
                     <PrivateRoute>
                         <Payment />

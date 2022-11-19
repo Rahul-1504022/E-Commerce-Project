@@ -27,3 +27,12 @@ export const couponDelete = (token, data) => {
         }
     })
 }
+
+export const saveCoupon = (token, data) => {
+    return axios.post(`${API}/coupon/saveCoupon`, data, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        }
+    })
+}

@@ -19,6 +19,10 @@ module.exports.Product = new model('Product', Schema({
     rating: {
         type: Number,
         default: 0,
+    },
+    sold: {
+        type: Number,
+        default: 0,
     }
 }, { timestamps: true }));
 

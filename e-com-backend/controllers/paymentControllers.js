@@ -5,6 +5,8 @@ const { Profile } = require('../models/profile');
 const { Order } = require('../models/order');
 const { Payment } = require('../models/payment');
 const path = require('path');
+const { Usedcoupon } = require('../models/usedCoupon');
+const { Product } = require('../models/product');
 
 //Request a Session
 //Payment Process
@@ -16,6 +18,14 @@ module.exports.ipn = async (req, res) => {
     const tran_id = payment['tran_id'];
     if (payment['status'] === "VALID") {
         const order = await Order.updateOne({ transaction_id: tran_id }, { status: "Complete" });
+        const cart = await Order.findOne({ transaction_id: tran_id });
+        const items = cart.cartItems;
+        for (let x of items) {
+            const product = await Product.findOne({ _id: x.product });
+            const sold = product.sold + x.count;
+            await Product.updateOne({ _id: x.product }, { sold: sold });
+
+        }
         await CartItem.deleteMany(order.cartItems);
     }
 
@@ -36,8 +46,12 @@ module.exports.ipn = async (req, res) => {
 
 module.exports.initPayment = async (req, res) => {
     const userID = req.user._id;
+    const saveCoupon = await Usedcoupon.findOne({ userId: userID });
+    let finalAmount = saveCoupon.amount;
+    await Usedcoupon.deleteOne({ userId: userID });
     const cartItems = await CartItem.find({ user: userID });
-    const total_amount = cartItems.map(item => item.count * item.price).reduce((a, b) => a + b, 0);
+    // let total_amount = cartItems.map(item => item.count * item.price).reduce((a, b) => a + b, 0);
+    const total_amount = finalAmount;
     const total_item = cartItems.map(item => item.count).reduce((a, b) => a + b, 0);
     const tran_id = '_' + Math.random().toString(36).substr(2, 9) + (new Date()).getTime();
 

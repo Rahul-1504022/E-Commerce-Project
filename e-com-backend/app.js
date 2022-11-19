@@ -17,9 +17,7 @@ const authGoogleRouter = require('./routers/authGoogleRouter');
 const couponRouter = require('./routers/couponRouter');
 
 app.use(express.json());//convert to json format
-app.use(cors({
-    origin: "*",
-}));
+app.use(cors());
 app.use(compression());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
