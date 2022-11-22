@@ -1,10 +1,11 @@
 import Layout from "../Layout";
 import { useState } from "react";
 import { showError, showLoading } from "../../utils/messages";
-import { register } from "../../api/apiAuth";
+import { register, googleLogin } from "../../api/apiAuth";
 import { Link, NavLink } from "react-router-dom";
 import { API } from "../../utils/config";
 import axios from "axios";
+
 
 const Register = () => {
     const [values, setValues] = useState({
@@ -46,7 +47,6 @@ const Register = () => {
                 })
             })
             .catch(error => {
-                console.log(error.response.data);
                 // if (error.response) {
                 //     errMsg = error.response.data;
                 // }
@@ -60,30 +60,29 @@ const Register = () => {
             })
     }
 
-    const googleLogin = () => {
-        axios.get(`${API}/auth/google`)
-            .then(response => console.log(response))
-            .catch(error => console.log(error))
-    }
+
 
     const signUpForm = () => (
         <form>
             <div className="form-group">
                 <label className="text-muted">Name:</label>
                 <input type="text" name="name" className="form-control" onChange={handleChange}
-                    value={name} />
+                    value={name} required />
             </div>
             <div className="form-group">
                 <label className="text-muted">Email:</label>
                 <input type="email" name="email" className="form-control" onChange={handleChange}
-                    value={email} />
+                    value={email} required />
             </div>
             <div className="form-group">
                 <label className="text-muted">Password:</label>
                 <input type="password" name="password" className="form-control" onChange={handleChange}
-                    value={password} />
+                    value={password} required />
             </div>
-            <button type="submit" className="btn btn-primary" onClick={handleSubmit} disabled={disabled}>Create Account</button>
+            <div className="row justify-content-center">
+                <button type="submit" className="btn btn-primary col-sm-6 mt-2" onClick={handleSubmit} disabled={disabled}>Create Account</button>
+            </div>
+
         </form>
 
     );
@@ -106,8 +105,6 @@ const Register = () => {
             <h3>Register Here</h3>
             <hr />
             {signUpForm()}
-            <hr />
-            <button className="btn btn-primary" onClick={googleLogin}>Google Login</button>
         </Layout>
     )
 }

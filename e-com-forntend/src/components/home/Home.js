@@ -10,6 +10,7 @@ import { isAuthnticated, userInfo } from '../../utils/auth';
 import { addToCart } from '../../api/apiOrder';
 import OrderBy from './OrderBy';
 import SortBy from './SortBy';
+import { googleLogin } from '../../api/apiAuth';
 
 const Home = () => {
     const [productLength, setProductLength] = useState();
@@ -28,6 +29,10 @@ const Home = () => {
     const [addLimitButton, setAddLimitButton] = useState(false);
 
     useEffect(() => {
+        // googleLogin()
+        //     .then(response => console.log(response))
+        //     .catch(error => console.log(error))
+
         getAllProduct()
             .then(response => setProductLength(response.data.length))
             .catch(err => setError("Failed to load products!"));

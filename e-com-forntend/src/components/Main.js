@@ -15,6 +15,7 @@ import ShippingAddress from "./order/ShippingAddress";
 import Checkout from "./order/Checkout";
 import Payment from "./order/Payment";
 import Coupon from "./admin/Coupon";
+import Waiting from "./user/Waiting";
 
 const Main = () => {
     return (
@@ -24,6 +25,7 @@ const Main = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/sociallogin/:token" element={<Waiting />} />
             <Route
                 path="/dashboard"
                 element={(

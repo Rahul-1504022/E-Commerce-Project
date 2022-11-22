@@ -90,7 +90,10 @@ const Login = () => {
                 <input name="password" type="password" className="form-control"
                     value={password} onChange={handleChange} required />
             </div>
-            <button type="submit" className="btn btn-outline-primary" onClick={handleSubmit} disabled={disabled} style={{ justifyContent: "center" }}>Login</button>
+            <div className="row justify-content-center mt-2">
+                <button type="submit" className="btn btn-outline-primary  col-sm-6" onClick={handleSubmit} disabled={disabled} style={{ justifyContent: "center" }}>Login</button>
+            </div>
+
         </form>
     );
     const showSuccess = () => {
@@ -103,6 +106,10 @@ const Login = () => {
         }
     }
 
+    const google = () => {
+        window.open(`${API}/auth/google`, "_self");
+    }
+
     return (
         <Layout title="Login" className="container col-md-8 offset-md-2">
             {showSuccess()}
@@ -113,7 +120,19 @@ const Login = () => {
             <hr />
             {signInForm()}
             <hr />
-            <button className="btn btn-primary">Google Login</button>
+
+            <div className="row justify-content-center">
+                <button className="btn btn-outline-primary col-sm-4" onClick={google}>
+                    <img src="google_logo.png" alt="icon" width="20px" height="20px" />&nbsp;&nbsp;
+                    Google
+                </button>
+                &nbsp;&nbsp;&nbsp;
+                <button className="btn btn-outline-primary col-sm-4">
+                    <img src="facebook_logo.png" alt="icon" width="20px" height="20px" />&nbsp;&nbsp;
+                    Facebook
+                </button>
+            </div>
+
         </Layout>
     )
 }
