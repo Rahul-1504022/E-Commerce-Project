@@ -15,6 +15,7 @@ const commentRouter = require('./routers/commentRouter');
 const orderHistoryRouter = require('./routers/orderHistoryRouter');
 const authGoogleRouter = require('./routers/authGoogleRouter');
 const couponRouter = require('./routers/couponRouter');
+const searchRouter = require('./routers/searchRouter');
 
 app.use(express.json());//convert to json format
 app.use(cors());
@@ -36,6 +37,7 @@ app.use('/api/comment', commentRouter);
 app.use('/api/getOrderHistory', orderHistoryRouter);
 app.use('/api/auth/google', authGoogleRouter);
 app.use('/api/coupon', couponRouter);
+app.use('/api/search', searchRouter);
 //using middleware for promise return type error handling
 //use it after router function 
 app.use(error);

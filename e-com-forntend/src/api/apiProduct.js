@@ -33,3 +33,7 @@ export const getFilteredProducts = (skip, limit, filters = {}, order, sortBy) =>
         }
     })
 }
+
+export const searchProduct = (query) => {
+    return axios.get(`${API}/search/${query}`)
+}

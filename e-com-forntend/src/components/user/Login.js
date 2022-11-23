@@ -120,7 +120,7 @@ const Login = () => {
             <hr />
             {signInForm()}
             <hr />
-
+            <h5 style={{ textAlign: "center" }}>OR</h5>
             <div className="row justify-content-center">
                 <button className="btn btn-outline-primary col-sm-4" onClick={google}>
                     <img src="google_logo.png" alt="icon" width="20px" height="20px" />&nbsp;&nbsp;

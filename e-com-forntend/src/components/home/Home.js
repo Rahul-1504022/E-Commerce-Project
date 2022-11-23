@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Layout from '../Layout';
 import Card from './Card';
 import { showError, showSuccess } from '../../utils/messages';
-import { getCategories, getProducts, getFilteredProducts, getAllProduct } from '../../api/apiProduct';
+import { getCategories, getProducts, getFilteredProducts, getAllProduct, searchProduct } from '../../api/apiProduct';
 import CheckBox from './CheckBox';
 import RadioBox from './RadioBox';
 import { prices } from '../../utils/price';
@@ -11,6 +11,7 @@ import { addToCart } from '../../api/apiOrder';
 import OrderBy from './OrderBy';
 import SortBy from './SortBy';
 import { googleLogin } from '../../api/apiAuth';
+import { Col, Row } from 'reactstrap';
 
 const Home = () => {
     const [productLength, setProductLength] = useState();
@@ -27,11 +28,10 @@ const Home = () => {
         price: []   //according to backend API
     });
     const [addLimitButton, setAddLimitButton] = useState(false);
+    const [showSearch, setShowSearch] = useState(false);
+    const [search, setSearch] = useState('');
 
     useEffect(() => {
-        // googleLogin()
-        //     .then(response => console.log(response))
-        //     .catch(error => console.log(error))
 
         getAllProduct()
             .then(response => setProductLength(response.data.length))
@@ -152,8 +152,24 @@ const Home = () => {
             </div>
         </>)
     }
+    const searchSubmit = (e) => {
+        e.preventDefault();
+        searchProduct(search)
+            .then(response => setProducts(response.data.result))
+            .catch(error => console.log(error))
+    }
+
+    const searchForm = (
+        <form onSubmit={searchSubmit}>
+            <div className='row justify-content-center'>
+                <input type="text" className='col-sm-6' value={search} onChange={(e) => setSearch(e.target.value)} />
+                <button className='btn btn-outline-success col-sm-1'>Search</button>
+            </div>
+        </form>
+    )
     return (
         <Layout title="Home Page" className="container-fluid">
+            {searchForm}
             {showFilters()}
             <div style={{ width: "100%" }}>
                 {showError(error, error)}
