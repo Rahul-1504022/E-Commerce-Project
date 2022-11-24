@@ -26,5 +26,6 @@ module.exports.Order = model('Order', Schema({
         type: Schema.Types.ObjectId,
         ref: "User"
     },
+    total_amount: Number,
     sessionKey: String,
 }))

@@ -7,6 +7,7 @@ const { Payment } = require('../models/payment');
 const path = require('path');
 const { Usedcoupon } = require('../models/usedCoupon');
 const { Product } = require('../models/product');
+const axios = require('axios');
 
 //Request a Session
 //Payment Process
@@ -17,16 +18,25 @@ module.exports.ipn = async (req, res) => {
     const payment = new Payment(req.body);
     const tran_id = payment['tran_id'];
     if (payment['status'] === "VALID") {
-        const order = await Order.updateOne({ transaction_id: tran_id }, { status: "Complete" });
-        const cart = await Order.findOne({ transaction_id: tran_id });
-        const items = cart.cartItems;
-        for (let x of items) {
-            const product = await Product.findOne({ _id: x.product });
-            const sold = product.sold + x.count;
-            await Product.updateOne({ _id: x.product }, { sold: sold });
 
-        }
-        await CartItem.deleteMany(order.cartItems);
+        //Order Validation API
+        //save if payment validation is VALID
+
+        axios.get(`https://sandbox.sslcommerz.com/validator/api/validationserverAPI.php?val_id=${payment.val_id}&store_id=${process.env.STORE_ID}&store_passwd=${process.env.STORE_PASSWORD}&format=json`)
+            .then(async (response) => {
+                if (response.data.status === "VALID" || response.data.status === "VALIDATED") {
+                    const order = await Order.updateOne({ transaction_id: tran_id }, { status: "Complete" });
+                    const cart = await Order.findOne({ transaction_id: tran_id });
+                    const items = cart.cartItems;
+                    for (let x of items) {
+                        const product = await Product.findOne({ _id: x.product });
+                        const sold = product.sold + x.count;
+                        await Product.updateOne({ _id: x.product }, { sold: sold });
+                    }
+                    await CartItem.deleteMany(order.cartItems);
+                }
+            })
+            .catch(error => console.log(error));
     }
 
     else if (payment['status'] === "FAILED") {
@@ -113,7 +123,7 @@ module.exports.initPayment = async (req, res) => {
         product_profile: "general",
     });
     let response = await payment.paymentInit(); //initiate payment
-    let order = new Order({ cartItems: cartItems, user: userID, transaction_id: tran_id, address: profile });
+    let order = new Order({ cartItems: cartItems, user: userID, transaction_id: tran_id, address: profile, total_amount: total_amount });
 
     if (response.status === "SUCCESS") {  //server response with sessionkey
         order['sessionKey'] = response['sessionkey'];
