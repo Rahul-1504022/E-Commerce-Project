@@ -40,14 +40,12 @@ module.exports.ipn = async (req, res) => {
     }
 
     else if (payment['status'] === "FAILED") {
-        const order = await Order.updateOne({ transaction_id: tran_id }, { status: "Failed" });
         // await CartItem.deleteMany(order.cartItems);
         await Order.deleteOne({ transaction_id: tran_id });
     }
 
     else if (payment['status'] === "CANCELLED") {
-        const order = await Order.updateOne({ transaction_id: tran_id }, { status: "Pending" });
-        // await Order.deleteOne({ transaction_id: tran_id });
+        await Order.deleteOne({ transaction_id: tran_id });
     }
 
     await payment.save();
@@ -57,8 +55,8 @@ module.exports.ipn = async (req, res) => {
 module.exports.initPayment = async (req, res) => {
     const userID = req.user._id;
     const saveCoupon = await Usedcoupon.findOne({ userId: userID });
-    let finalAmount = saveCoupon.amount;
     await Usedcoupon.deleteOne({ userId: userID });
+    let finalAmount = saveCoupon.amount;
     const cartItems = await CartItem.find({ user: userID });
     // let total_amount = cartItems.map(item => item.count * item.price).reduce((a, b) => a + b, 0);
     const total_amount = finalAmount;

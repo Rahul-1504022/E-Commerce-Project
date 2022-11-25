@@ -19,9 +19,11 @@ const LoadOrder = ({ order }) => {
                 <Row>
                     <Col md={8}>
                         <Card>
-                            <CardTitle>Product Name : {productName} </CardTitle>
+                            {/* <CardTitle>Product Name : {productName} </CardTitle> */}
                             <CardText>
-                                Price : <span style={{ color: "blue", fontWeight: "600", fontSize: "20px" }}>{item.price}</span> BDT &nbsp;&nbsp;&nbsp;&nbsp; Unit Ordered : <span style={{ color: "green", fontWeight: "600", fontSize: "20px" }}>{item.count}</span>
+                                Price : <span style={{ color: "blue", fontWeight: "600", fontSize: "20px" }}>{item.price}</span> BDT
+                                <br />
+                                Unit Ordered : <span style={{ color: "green", fontWeight: "600", fontSize: "20px" }}>{item.count}</span>
                             </CardText>
 
                         </Card>

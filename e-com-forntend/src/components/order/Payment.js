@@ -10,14 +10,8 @@ const Payment = () => {
     const [redirectUrl, setRedirectUrl] = useState('');
     const { finalAmount } = useParams();
     const [message, setMessage] = useState("");
-    useEffect(() => {
-        const data = {
-            finalAmount: finalAmount,
-        }
-        saveCoupon(userInfo().token, data)
-            .then(response => setMessage(response.data))
-            .catch(error => console.log("saveCoupon", error))
 
+    const initiatePayment = () => {
         initPayment(userInfo().token)
             .then(response => {
                 if (response.data.status === "SUCCESS") {
@@ -30,6 +24,31 @@ const Payment = () => {
                 setFailed(true);
                 setSessionSuccess(false);
             })
+    }
+
+    useEffect(() => {
+        const data = {
+            finalAmount: finalAmount,
+        }
+        saveCoupon(userInfo().token, data)
+            .then(response => {
+                setMessage(response.data)
+                initiatePayment();
+            })
+            .catch(error => console.log("saveCoupon", error))
+
+        // initPayment(userInfo().token)
+        //     .then(response => {
+        //         if (response.data.status === "SUCCESS") {
+        //             setSessionSuccess(true);
+        //             setRedirectUrl(response.data.GatewayPageURL);
+        //             setFailed(false);
+        //         }
+        //     })
+        //     .catch(error => {
+        //         setFailed(true);
+        //         setSessionSuccess(false);
+        //     })
     }, [])
     return (
         <div>

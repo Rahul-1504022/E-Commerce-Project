@@ -4,7 +4,7 @@ import { userInfo } from '../../utils/auth';
 import { useEffect, useState } from 'react';
 import { getOrderHistory } from '../../api/orderHistory';
 import LoadOrder from './LoadOrder';
-import { Card, CardBody, CardFooter, CardHeader } from 'reactstrap';
+import { Card, CardBody, CardFooter, CardHeader, Toast, ToastBody, ToastHeader } from 'reactstrap';
 
 const Dashboard = () => {
     const { name, email, role } = userInfo();
@@ -31,9 +31,21 @@ const Dashboard = () => {
                             />
                         </CardBody>
                         <CardFooter>
-                            Payment Amount : <span style={{ color: "red", fontSize: "20px", fontWeight: "700" }}>{sum}</span> BDT
-                            <br />
-                            Payment Status :<span style={{ color: 'green' }}> Paid</span>
+                            Payment Amount : <span style={{ color: "red", fontSize: "20px", fontWeight: "700" }}>{order.total_amount}</span> BDT
+                            <Toast>
+                                <ToastHeader icon="success">Voucher Status</ToastHeader>
+                                <ToastBody>{sum > order.total_amount ? <span style={{ color: "green", fontSize: "20px", fontWeight: "500" }}>Used</span>
+                                    :
+                                    <span style={{ color: "red", fontSize: "20px", fontWeight: "500" }}>Not Used</span>
+                                }
+                                </ToastBody>
+                            </Toast>
+                            {order.status === "Complete" ?
+                                <>Payment Status :<span style={{ color: 'green', fontSize: "20px", fontWeight: "700" }}> Paid</span></>
+                                :
+                                <>Payment Status :<span style={{ color: 'green', fontSize: "20px", fontWeight: "700" }}> Failed</span></>
+                            }
+
                         </CardFooter>
                     </Card>
                     <br />
