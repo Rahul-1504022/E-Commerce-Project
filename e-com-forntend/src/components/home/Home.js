@@ -98,7 +98,7 @@ const Home = () => {
         }
         if (filterBy === 'limitAdd') {
             setLimit((prevLimit) => prevLimit + 3);
-            if (productLength <= limit) {
+            if (productLength < limit) {
                 setAddLimitButton(true);
             }
         }
