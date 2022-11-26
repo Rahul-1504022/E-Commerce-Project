@@ -109,7 +109,9 @@ const Login = () => {
     const google = () => {
         window.open(`${API}/auth/google`, "_self");
     }
-
+    const facebook = () => {
+        window.open(`${API}/auth/facebook`, "_self");
+    }
     return (
         <Layout title="Login" className="container col-md-8 offset-md-2">
             {showSuccess()}
@@ -127,7 +129,7 @@ const Login = () => {
                     Google
                 </button>
                 &nbsp;&nbsp;&nbsp;
-                <button className="btn btn-outline-primary col-sm-4">
+                <button className="btn btn-outline-primary col-sm-4" onClick={facebook}>
                     <img src="facebook_logo.png" alt="icon" width="20px" height="20px" />&nbsp;&nbsp;
                     Facebook
                 </button>

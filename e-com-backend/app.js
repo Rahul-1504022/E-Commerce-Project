@@ -14,6 +14,7 @@ const paymentRouter = require('./routers/paymentRouter');
 const commentRouter = require('./routers/commentRouter');
 const orderHistoryRouter = require('./routers/orderHistoryRouter');
 const authGoogleRouter = require('./routers/authGoogleRouter');
+const authFacebookRouter = require('./routers/authFacebookRouter');
 const couponRouter = require('./routers/couponRouter');
 const searchRouter = require('./routers/searchRouter');
 
@@ -36,6 +37,7 @@ app.use('/api/payment', paymentRouter);
 app.use('/api/comment', commentRouter);
 app.use('/api/getOrderHistory', orderHistoryRouter);
 app.use('/api/auth/google', authGoogleRouter);
+app.use('/api/auth/facebook', authFacebookRouter);
 app.use('/api/coupon', couponRouter);
 app.use('/api/search', searchRouter);
 //using middleware for promise return type error handling

@@ -1,15 +1,16 @@
 const router = require('express').Router();
 const passport = require('passport');
-require('../config/authGoogleConfig');
+require('../config/authFacebookConfig');
+
 
 
 //(When user click the button)
 router.route('/')
-    .get(passport.authenticate("google", { scope: ["profile", "email"] }))
+    .get(passport.authenticate("facebook", { scope: "email" }))
 
-//  (When google redirect)
+//  (When facebook redirect)
 router.route('/redirect')
-    .get(passport.authenticate("google", { session: false }), (req, res) => {
+    .get(passport.authenticate("facebook", { session: false }), (req, res) => {
         // return res.status(200).send(req.user); //user is a by default attribute
         // res.sendFile(path.join(__basedir, "public/loginSuccess.html"));
         if (req.user) {
@@ -24,6 +25,3 @@ router.route('/redirect')
     })
 
 module.exports = router;
-
-//Session Based Authentication
-//Token Based Authentication
